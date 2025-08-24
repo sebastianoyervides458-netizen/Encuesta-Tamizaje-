@@ -48,10 +48,9 @@
 
   <script>
     // ======== CONFIGURACIÓN DE SUPABASE ========
-    const SUPABASE_URL = "https://TU-PROYECTO.supabase.co"; // reemplaza con tu URL
-    const SUPABASE_ANON_KEY = "TU-ANON-KEY"; // reemplaza con tu anon key
+    const SUPABASE_URL = "(https://oxqpylpgwawbklabnwcv.supabase.co)"; // reemplaza con tu URL
+    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94cXB5bHBnd2F3YmtsYWJud2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNjM5MzUsImV4cCI6MjA3MTYzOTkzNX0.JIVCrC99Vzokk9KT6OOJCp2mW7k7imi5SFAeIBOQyfo"; // reemplaza con tu anon key
     const TABLE = "respuestas";
-
     async function saveToSupabase(payload) {
       const resp = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
         method: 'POST',
