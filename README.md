@@ -8,8 +8,7 @@
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-900">
   <main class="max-w-2xl mx-auto py-10 px-4">
-    <header class="mb-8">
-      <h1 class="text-3xl font-bold tracking-tight">Encuesta de Tabaquismo</h1>
+    <header class="mb-8"
       <p class="text-sm text-gray-600 mt-2">Este cuestionario está diseñado para identificar pacientes con riesgo de cáncer de pulmón (según guías NCCN 2025). Las respuestas son anónimas y sólo se usarán con fines académicos.</p>
     </header>
 
