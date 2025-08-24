@@ -7,8 +7,17 @@
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-900">
+  <!-- Barra superior personalizada -->
+  <nav class="bg-indigo-700 text-white py-4 shadow">
+    <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
+      <h1 class="text-xl font-bold">Proyecto de Tamizaje Pulmonar</h1>
+      <span class="text-sm opacity-80">Encuesta de pacientes</span>
+    </div>
+  </nav>
+
   <main class="max-w-2xl mx-auto py-10 px-4">
-    <header class="mb-8"
+    <header class="mb-8">
+      <h2 class="text-3xl font-bold tracking-tight text-indigo-800">Encuesta de Tabaquismo</h2>
       <p class="text-sm text-gray-600 mt-2">Este cuestionario está diseñado para identificar pacientes con riesgo de cáncer de pulmón (según guías NCCN 2025). Las respuestas son anónimas y sólo se usarán con fines académicos.</p>
     </header>
 
@@ -46,11 +55,16 @@
     </form>
   </main>
 
+  <footer class="bg-gray-100 text-center text-xs text-gray-500 py-4 mt-10">
+    <p>© 2025 Proyecto de Tamizaje Pulmonar · Desarrollado para fines académicos</p>
+  </footer>
+
   <script>
     // ======== CONFIGURACIÓN DE SUPABASE ========
-    const SUPABASE_URL = "(https://oxqpylpgwawbklabnwcv.supabase.co)"; // reemplaza con tu URL
+    const SUPABASE_URL = "https://oxqpylpgwawbklabnwcv.supabase.co"; // reemplaza con tu URL
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94cXB5bHBnd2F3YmtsYWJud2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNjM5MzUsImV4cCI6MjA3MTYzOTkzNX0.JIVCrC99Vzokk9KT6OOJCp2mW7k7imi5SFAeIBOQyfo"; // reemplaza con tu anon key
     const TABLE = "respuestas";
+
     async function saveToSupabase(payload) {
       const resp = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
         method: 'POST',
