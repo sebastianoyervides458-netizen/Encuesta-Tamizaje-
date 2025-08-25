@@ -14,10 +14,16 @@
     </div>
   </nav>
 
+  <!-- Banner de estado / diagnóstico -->
+  <div id="diagBanner" class="hidden bg-yellow-50 text-yellow-900 border border-yellow-300 px-4 py-3 text-sm">
+    <strong class="font-semibold">Diagnóstico:</strong>
+    <span id="diagText">—</span>
+  </div>
+
   <main class="max-w-3xl mx-auto py-8 px-4">
     <header class="mb-6">
       <h2 class="text-3xl font-bold tracking-tight text-indigo-800">Encuestas</h2>
-      <p class="text-sm text-gray-600 mt-2">Complete los cuestionarios. Paso 1: tabaquismo. Paso 2: humo de leña.</p>
+      <p class="text-sm text-gray-600 mt-2">Complete los cuestionarios. Paso 1: datos básicos → Paso 2: tabaquismo → Paso 3: humo de leña. Envío único al final.</p>
     </header>
 
     <!-- Tabs -->
@@ -48,14 +54,13 @@
 
       <div>
         <label class="block text-sm font-medium">Código postal</label>
-        <input type="text" name="codigo_postal" inputmode="numeric" pattern="\d{5}" maxlength="5" class="mt-1 w-full rounded-xl border-black-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej. 64000" required />
+        <input type="text" name="codigo_postal" inputmode="numeric" pattern="\d{5}" maxlength="5" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej. 64000" required />
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button type="button" id="nextToStep2" class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Continuar</button>
+        <button type="button" id="nextToStep2" class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Continuar al Paso 2</button>
         <button type="button" id="goStep3" class="w-full py-3 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-semibold shadow">Ir a Humo de leña</button>
       </div>
-      <p id="status1" class="text-sm mt-3"></p>
     </form>
 
     <!-- PASO 2: TABAQUISMO -->
@@ -63,11 +68,11 @@
       <h3 class="text-lg font-semibold mb-4">Encuesta de tabaquismo</h3>
       <div>
         <label class="block text-sm font-medium">¿Cuántos años lleva fumando o fumó?</label>
-        <input type="number" name="anios_fumando" min="0" class="mt-1 w-full rounded-xl border-black-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+        <input type="number" name="anios_fumando" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
       <div>
         <label class="block text-sm font-medium">Durante ese tiempo, ¿cuántos cigarros fuma o fumó al día?</label>
-        <input type="number" name="cigarros_dia" min="0" class="mt-1 w-full rounded-xl border-black-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+        <input type="number" name="cigarros_dia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
       <div>
         <label class="block text-sm font-medium">Índice tabáquico (IT)</label>
@@ -75,9 +80,8 @@
       </div>
       <div class="flex gap-3">
         <button type="button" id="backToStep1" class="px-4 py-3 rounded-2xl bg-gray-200 text-gray-800 font-semibold">Regresar</button>
-        <button type="submit" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow">Enviar evaluación (Tabaquismo)</button>
+        <button type="button" id="nextToStep3" class="flex-1 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Siguiente: Humo de leña</button>
       </div>
-      <p id="status2" class="text-sm mt-3"></p>
     </form>
 
     <!-- PASO 3: HUMO DE LEÑA -->
@@ -101,28 +105,95 @@
       <div>
         <label class="block text-sm font-medium">Índice de biomasa (IB)</label>
         <input id="indice_biomasa" type="text" readonly class="w-full rounded-xl border-gray-300 bg-gray-100 px-3 py-2" placeholder="Se calculará automáticamente" />
-        <p class="text-xs text-gray-500">IB = (Años de exposición × Horas promedio/día). Clasifica alto si > 100.</p>
+        <p class="text-xs text-gray-500">IB = (Años de exposición × Horas promedio/día). Clasifica alto si &gt; 100.</p>
       </div>
       <div class="rounded-xl border p-4 bg-gray-50">
         <p class="text-sm">Resultado humo de leña: <span id="resultadoLenia" class="font-semibold">—</span></p>
       </div>
       <div class="flex gap-3">
         <button type="button" id="backToStep1From3" class="px-4 py-3 rounded-2xl bg-gray-200 text-gray-800 font-semibold">Regresar</button>
-        <button type="submit" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow">Enviar evaluación (Humo de leña)</button>
+        <button type="submit" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow">Enviar evaluación</button>
       </div>
       <p id="status3" class="text-sm mt-3"></p>
     </form>
+
+    <!-- Panel de ayuda RLS / Exportación -->
+    <section id="policyHelp" class="hidden mt-8 rounded-2xl border border-red-300 bg-red-50 p-4">
+      <h4 class="font-semibold text-red-800 mb-2">Supabase: Falta política de Row Level Security (RLS) para insertar</h4>
+      <p class="text-sm text-red-900">Copia y ejecuta este SQL en <em>SQL Editor</em> de Supabase para permitir <code>INSERT</code> desde GitHub Pages (rol <code>anon</code>):</p>
+      <pre class="mt-3 overflow-auto text-xs bg-white p-3 rounded border"><code id="policySQL">-- Habilita RLS si aún no
+alter table public.respuestas enable row level security;
+
+-- Permitir INSERT al rol público anónimo (Pages)
+create policy if not exists "anon can insert respuestas"
+  on public.respuestas
+  for insert
+  to anon
+  with check (true);
+</code></pre>
+      <div class="mt-3 flex gap-2">
+        <button id="copyPolicy" class="px-3 py-2 rounded-lg bg-red-600 text-white text-sm">Copiar SQL</button>
+        <button id="exportCSV" class="px-3 py-2 rounded-lg bg-gray-800 text-white text-sm">Exportar pendientes (CSV)</button>
+        <button id="retrySend" class="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm">Reintentar envío</button>
+      </div>
+      <p class="text-xs text-red-700 mt-2">Mientras aplicas la política, este formulario guardará localmente y te permite exportar un CSV para no perder respuestas.</p>
+    </section>
   </main>
 
   <footer class="bg-gray-100 text-center text-xs text-gray-500 py-4 mt-10">
     <p>© 2025 Proyecto de Tamizaje Pulmonar · Desarrollado para fines académicos</p>
+    <p id="testsSummary" class="mt-1 text-[11px]"></p>
   </footer>
 
   <script>
+    // ===== Supabase Config =====
     const SUPABASE_URL = "https://oxqpylpgwawbklabnwcv.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94cXB5bHBnd2F3YmtsYWJud2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNjM5MzUsImV4cCI6MjA3MTYzOTkzNX0.JIVCrC99Vzokk9KT6OOJCp2mW7k7imi5SFAeIBOQyfo";
     const TABLE = "respuestas";
 
+    // ===== Utilidades UI =====
+    function showDiag(msg){
+      const b = document.getElementById('diagBanner');
+      const t = document.getElementById('diagText');
+      if (!b || !t) return;
+      t.textContent = msg;
+      b.classList.remove('hidden');
+    }
+    function hideDiag(){
+      const b = document.getElementById('diagBanner');
+      if (b) b.classList.add('hidden');
+    }
+
+    // ===== Persistencia local (cola offline) =====
+    const LS_KEY = 'encuesta_pendientes_v1';
+    function queueLocally(payload){
+      const arr = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+      arr.push({ ts: new Date().toISOString(), payload });
+      localStorage.setItem(LS_KEY, JSON.stringify(arr));
+    }
+    function getPending(){
+      return JSON.parse(localStorage.getItem(LS_KEY) || '[]');
+    }
+    function clearPending(){
+      localStorage.removeItem(LS_KEY);
+    }
+    function exportPendingCSV(){
+      const rows = getPending();
+      if (!rows.length){ alert('No hay pendientes.'); return; }
+      const headers = Array.from(new Set(rows.flatMap(r => Object.keys(r.payload))));
+      const csvRows = [ ['ts', ...headers].join(',') ];
+      for (const r of rows){
+        const line = [r.ts, ...headers.map(h => JSON.stringify(r.payload[h] ?? ''))].join(',');
+        csvRows.push(line);
+      }
+      const blob = new Blob([csvRows.join('\n')], {type:'text/csv'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = 'pendientes_encuesta.csv'; a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    // ===== API =====
     async function saveToSupabase(payload) {
       const resp = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
         method: 'POST',
@@ -136,16 +207,19 @@
       });
       if (!resp.ok) {
         const txt = await resp.text();
-        throw new Error(`Error ${resp.status}: ${txt}`);
+        const msg = `Error ${resp.status}: ${txt}`;
+        throw new Error(msg);
       }
       return await resp.json();
     }
 
+    // ===== Cálculos =====
     function calcularIT(){
       const anios = Number(document.querySelector('[name="anios_fumando"]').value)||0;
       const cigarros = Number(document.querySelector('[name="cigarros_dia"]').value)||0;
       const it = (cigarros * anios)/20;
-      document.getElementById('indice_tabaco').value = it ? it.toFixed(1) : '';
+      const itEl = document.getElementById('indice_tabaco');
+      if (itEl) itEl.value = it ? it.toFixed(1) : '';
       return it;
     }
 
@@ -153,75 +227,72 @@
       const anios = Number(document.querySelector('[name="anios_exp_lenia"]').value)||0;
       const horas = Number(document.querySelector('[name="horas_dia_lenia"]').value)||0;
       const ib = anios * horas;
-      document.getElementById('indice_biomasa').value = ib ? ib.toFixed(1) : '';
-      const el = document.getElementById('resultadoLenia');
-      if(ib > 100) {
-        el.textContent = 'Alto Riesgo';
-        el.className = 'font-semibold text-red-600';
-      } else {
-        el.textContent = 'Bajo Riesgo';
-        el.className = 'font-semibold text-emerald-700';
+      const ibEl = document.getElementById('indice_biomasa');
+      if (ibEl) ibEl.value = ib ? ib.toFixed(1) : '';
+      const resEl = document.getElementById('resultadoLenia');
+      if (resEl){
+        if(ib > 100){ resEl.textContent = 'Alto Riesgo'; resEl.className = 'font-semibold text-red-600'; }
+        else { resEl.textContent = 'Bajo Riesgo'; resEl.className = 'font-semibold text-emerald-700'; }
       }
       return ib;
     }
 
-    // Tabs
-document.addEventListener('DOMContentLoaded', () => {
-  // Referencias
-  const nextToStep2 = document.getElementById('nextToStep2');
-  const nextToStep3 = document.getElementById('nextToStep3');
-  const backToStep1 = document.getElementById('backToStep1');
-  const backToStep1From3 = document.getElementById('backToStep1From3');
+    // ===== Tabs + navegación =====
+    const step1 = document.getElementById('step1');
+    const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
+    const tab1Btn = document.getElementById('tab1Btn');
+    const tab2Btn = document.getElementById('tab2Btn');
+    const tab3Btn = document.getElementById('tab3Btn');
 
-  const step1 = document.getElementById('step1');
-  const step2 = document.getElementById('step2');
-  const step3 = document.getElementById('step3');
-  const tab1Btn = document.getElementById('tab1Btn');
-  const tab2Btn = document.getElementById('tab2Btn');
-  const tab3Btn = document.getElementById('tab3Btn');
-
-  function activateTab(tab){
-    tab1Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-    tab2Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-    tab3Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-    step1.classList.add('hidden'); step2.classList.add('hidden'); step3.classList.add('hidden');
-    if (tab===1){ tab1Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step1.classList.remove('hidden'); }
-    if (tab===2){ tab2Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step2.classList.remove('hidden'); }
-    if (tab===3){ tab3Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step3.classList.remove('hidden'); }
-    tab2Btn.disabled = false; tab3Btn.disabled = false;
-  }
-
-  // Validación Paso 1 → Paso 2
-  if (nextToStep2) nextToStep2.addEventListener('click', () => {
-    const cp = document.querySelector('[name="codigo_postal"]').value.trim();
-    const sexoChecked = document.querySelector('[name="sexo"]:checked');
-    const edadVal = Number(document.querySelector('[name="edad"]').value || 0);
-    const cpOK = /^\d{5}$/.test(cp);
-    if (!edadVal || !sexoChecked || !cpOK) {
-      // Muestra validaciones nativas
-      document.getElementById('step1').reportValidity();
-      if (!cpOK) alert('Código postal debe tener 5 dígitos.');
-      return;
+    function activateTab(tab){
+      tab1Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+      tab2Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+      tab3Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+      step1.classList.add('hidden'); step2.classList.add('hidden'); step3.classList.add('hidden');
+      if(tab===1){ tab1Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step1.classList.remove('hidden'); }
+      if(tab===2){ tab2Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step2.classList.remove('hidden'); }
+      if(tab===3){ tab3Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step3.classList.remove('hidden'); }
+      tab2Btn.disabled=false; tab3Btn.disabled=false;
     }
-    activateTab(2);
-  });
 
-  // Paso 2 → Paso 3 (solo navegar)
-  if (nextToStep3) nextToStep3.addEventListener('click', () => {
-    activateTab(3);
-  });
+    // Listeners de navegación
+    document.getElementById('nextToStep2').addEventListener('click', ()=>{
+      if (step1.checkValidity()) activateTab(2); else step1.reportValidity();
+    });
+    document.getElementById('goStep3').addEventListener('click', ()=> activateTab(3));
+    document.getElementById('backToStep1').addEventListener('click', ()=> activateTab(1));
+    document.getElementById('backToStep1From3').addEventListener('click', ()=> activateTab(1));
+    document.getElementById('nextToStep3').addEventListener('click', ()=> activateTab(3));
 
-  if (backToStep1) backToStep1.addEventListener('click', () => activateTab(1));
-  if (backToStep1From3) backToStep1From3.addEventListener('click', () => activateTab(1));
-});
+    // Listeners de cálculo
+    document.querySelector('[name="anios_fumando"]').addEventListener('input', calcularIT);
+    document.querySelector('[name="cigarros_dia"]').addEventListener('input', calcularIT);
+    document.querySelector('[name="anios_exp_lenia"]').addEventListener('input', calcularIB);
+    document.querySelector('[name="horas_dia_lenia"]').addEventListener('input', calcularIB);
 
-    // Submit humo de leña
-    // Envío ÚNICO al final (Paso 3)
+    // ===== Envío único con manejo de RLS =====
+    document.getElementById('copyPolicy').addEventListener('click', ()=>{
+      const txt = document.getElementById('policySQL').innerText;
+      navigator.clipboard.writeText(txt);
+      alert('SQL copiado. Pégalo en Supabase → SQL Editor y ejecútalo.');
+    });
+    document.getElementById('exportCSV').addEventListener('click', exportPendingCSV);
+    document.getElementById('retrySend').addEventListener('click', async ()=>{
+      const pend = getPending();
+      if (!pend.length){ alert('No hay pendientes que reenviar.'); return; }
+      showDiag('Reintentando envío de ' + pend.length + ' registro(s)…');
+      try{
+        for (const item of pend){ await saveToSupabase(item.payload); }
+        clearPending(); hideDiag(); alert('¡Listo! Se reenvió la cola.');
+      }catch(err){ showDiag('Sigue fallando el envío. Revisa la política RLS.'); console.error(err); }
+    });
+
+    const status3 = document.getElementById('status3');
     step3.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      const status = document.getElementById('status3');
-      status.textContent = 'Enviando…';
-      status.className = 'text-sm mt-3 text-gray-600';
+      status3.textContent = 'Enviando…';
+      status3.className = 'text-sm mt-3 text-gray-600';
       try{
         const itVal = calcularIT() || 0;
         const ibVal = calcularIB() || 0;
@@ -231,11 +302,9 @@ document.addEventListener('DOMContentLoaded', () => {
           edad: Number(document.querySelector('[name="edad"]').value)||null,
           sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
           codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
-          // Tabaquismo
           anios_fumando: Number(document.querySelector('[name="anios_fumando"]').value)||0,
           cigarros_dia: Number(document.querySelector('[name="cigarros_dia"]').value)||0,
           indice_tabaco: Number(itVal.toFixed ? itVal.toFixed(1) : itVal),
-          // Humo de leña
           exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
           anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0,
           horas_dia_lenia: Number(document.querySelector('[name="horas_dia_lenia"]').value)||0,
@@ -243,23 +312,76 @@ document.addEventListener('DOMContentLoaded', () => {
           clasificacion_riesgo_lenia: clasificacion_lenia
         };
         await saveToSupabase(payload);
-        status.textContent = '¡Listo! Se enviaron todas las respuestas.';
-        status.className = 'text-sm mt-3 text-green-600';
+        status3.textContent = '¡Listo! Se enviaron todas las respuestas.';
+        status3.className = 'text-sm mt-3 text-green-600';
+        hideDiag();
       }catch(err){
         console.error(err);
-        status.textContent = 'Error al guardar. Revisa conexión o configuración.';
-        status.className = 'text-sm mt-3 text-red-600';
+        // Manejo específico de RLS 401/403
+        const isRLS = /row-level security|42501|401|403/i.test(err.message);
+        if (isRLS){
+          queueLocally({
+            note: 'guardado-local-por-rls',
+            ...{
+              created_at: new Date().toISOString(),
+              edad: Number(document.querySelector('[name="edad"]').value)||null,
+              sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
+              codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
+              anios_fumando: Number(document.querySelector('[name="anios_fumando"]').value)||0,
+              cigarros_dia: Number(document.querySelector('[name="cigarros_dia"]').value)||0,
+              indice_tabaco: Number((calcularIT()||0).toFixed ? (calcularIT()||0).toFixed(1) : (calcularIT()||0)),
+              exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
+              anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0,
+              horas_dia_lenia: Number(document.querySelector('[name="horas_dia_lenia"]').value)||0,
+              indice_biomasa: Number((calcularIB()||0).toFixed ? (calcularIB()||0).toFixed(1) : (calcularIB()||0)),
+              clasificacion_riesgo_lenia: (calcularIB()||0) > 100 ? 'Alto Riesgo' : 'Bajo Riesgo'
+            }
+          });
+          document.getElementById('policyHelp').classList.remove('hidden');
+          showDiag('No se pudo insertar en Supabase por política RLS. Se guardó localmente y puedes exportar CSV.');
+          status3.textContent = 'Guardado local por RLS. Aplica la política y reintenta.';
+          status3.className = 'text-sm mt-3 text-red-600';
+        } else {
+          status3.textContent = 'Error al guardar. Revisa conexión o configuración.';
+          status3.className = 'text-sm mt-3 text-red-600';
+        }
       }
     });
-      const status = document.getElementById('status3');
-      status.textContent = 'Enviando…';
-      status.className = 'text-sm mt-3 text-gray-600';
-      try{
-        const payload = {
-          created_at: new Date().toISOString(),
-          tipo_formulario: 'humo_lenia',
-          edad: Number(document.querySelector('[name="edad"]').value)||null,
-          sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
-          codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
-          exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
-          anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0
+
+    // ===== Tests rápidos (auto-chequeo en consola + pie de página) =====
+    function runSelfTests(){
+      const cases = [];
+      // IT: (cigarros*días)/20
+      cases.push({ name:'IT básico', fn: ()=>{ 
+        document.querySelector('[name="anios_fumando"]').value = 20;
+        document.querySelector('[name="cigarros_dia"]').value = 20;
+        const v = calcularIT();
+        return Math.abs(v - 20) < 1e-9; // 20*20/20 = 20
+      }});
+      cases.push({ name:'IB básico', fn: ()=>{
+        document.querySelector('[name="anios_exp_lenia"]').value = 25;
+        document.querySelector('[name="horas_dia_lenia"]').value = 5;
+        const v = calcularIB();
+        return Math.abs(v - 125) < 1e-9; // 25*5 = 125 (alto)
+      }});
+      // Validación CP (no modifica DOM): usar RegExp directamente
+      cases.push({ name:'CP 5 dígitos', fn: ()=>/^\d{5}$/.test('64000') && !/^\d{5}$/.test('6400') });
+
+      let pass = 0; const results = [];
+      for (const c of cases){ const ok = !!c.fn(); pass += ok?1:0; results.push(`${ok?'✅':'❌'} ${c.name}`); }
+      console.log('[Self-tests]', results.join(' | '));
+      const el = document.getElementById('testsSummary');
+      if (el) el.textContent = `Tests: ${pass}/${cases.length} → ${results.join(' · ')}`;
+    }
+    window.addEventListener('load', runSelfTests);
+
+    // ===== Banner de errores JS globales =====
+    window.addEventListener('error', (ev) => {
+      const el = document.createElement('div');
+      el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#fee;color:#900;padding:8px 12px;font:12px/1.4 system-ui;z-index:9999;border-top:1px solid #f88';
+      el.textContent = 'Error JS: ' + (ev.message || ev.error || ev.filename || 'desconocido');
+      document.body.appendChild(el);
+    });
+  </script>
+</body>
+</html>
