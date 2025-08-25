@@ -3,11 +3,10 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Encuesta de Tabaquismo</title>
+  <title>Encuesta de Tabaquismo y Humo de Leña</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-900">
-  <!-- Barra superior personalizada -->
   <nav class="bg-indigo-700 text-white py-4 shadow">
     <div class="max-w-4xl mx-auto px-4 flex justify-between items-center">
       <h1 class="text-xl font-bold">Proyecto de Tamizaje Pulmonar</h1>
@@ -17,103 +16,101 @@
 
   <main class="max-w-3xl mx-auto py-8 px-4">
     <header class="mb-6">
-      <h2 class="text-3xl font-bold tracking-tight text-indigo-800">Encuesta de Tabaquismo</h2>
-      <p class="text-sm text-gray-600 mt-2">Paso 1: datos básicos e índice tabáquico. Paso 2: preguntas del diagrama y clasificación de riesgo.</p>
+      <h2 class="text-3xl font-bold tracking-tight text-indigo-800">Encuestas</h2>
+      <p class="text-sm text-gray-600 mt-2">Complete los cuestionarios. Paso 1: tabaquismo. Paso 2: humo de leña.</p>
     </header>
 
     <!-- Tabs -->
     <div class="flex gap-2 mb-4">
       <button id="tab1Btn" class="px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold">Paso 1 · Datos básicos</button>
-      <button id="tab2Btn" class="px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold" disabled>Paso 2 · Diagrama</button>
+      <button id="tab2Btn" class="px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold" disabled>Paso 2 · Tabaquismo</button>
+      <button id="tab3Btn" class="px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold" disabled>Paso 3 · Humo de leña</button>
     </div>
 
-    <!-- PASO 1 -->
+    <!-- PASO 1: DATOS BÁSICOS -->
     <form id="step1" class="space-y-6 bg-white p-6 rounded-2xl shadow">
+      <h3 class="text-lg font-semibold mb-4">Datos básicos</h3>
       <div>
-        <label class="block text-sm font-medium">1. ¿Cuántos años tiene?</label>
+        <label class="block text-sm font-medium">Edad</label>
         <input type="number" name="edad" min="0" max="120" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
-        <p class="text-xs text-gray-500">*Continuar sólo si es mayor a 50 años*</p>
       </div>
 
       <div>
-        <label class="block text-sm font-medium">2. ¿Cuántos años lleva fumando o fumó?</label>
-        <input type="number" name="anios_fumando" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
-        <p class="text-xs text-gray-500">*Si ≥ 20 años, es candidato para TC de baja dosis según NCCN 2025*</p>
+        <label class="block text-sm font-medium">Sexo</label>
+        <div class="mt-2 flex flex-wrap gap-6 text-sm">
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="M" required> Masculino</label>
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="F"> Femenino</label>
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="Intersex"> Intersex</label>
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="No binario"> No binario</label>
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="Prefiero no decir"> Prefiero no decir</label>
+        </div>
       </div>
 
       <div>
-        <label class="block text-sm font-medium">3. Durante ese tiempo, ¿cuántos cigarros fuma o fumó al día?</label>
-        <input type="number" name="cigarros_dia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+        <label class="block text-sm font-medium">Código postal</label>
+        <input type="text" name="codigo_postal" inputmode="numeric" pattern="\d{5}" maxlength="5" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej. 64000" required />
       </div>
 
-      <div>
-        <label class="block text-sm font-medium">4. Índice tabáquico (IT)</label>
-        <p class="text-xs text-gray-500 mb-2">IT = (Cigarros por día × Años fumando) / 20</p>
-        <input id="indice_tabaco" type="text" readonly class="w-full rounded-xl border-gray-300 bg-gray-100 px-3 py-2" placeholder="Se calculará automáticamente" />
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        <button type="submit" class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Continuar al Paso 2</button>
+        <button type="button" id="goStep3" class="w-full py-3 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-semibold shadow">Ir a Humo de leña</button>
       </div>
-
-      <div class="flex items-start gap-3">
-        <input id="consent" type="checkbox" required class="mt-1" />
-        <label for="consent" class="text-sm text-gray-700">Confirmo que he leído el aviso de privacidad y doy mi consentimiento para el uso académico de mis respuestas.</label>
-      </div>
-
-      <button type="submit" class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Continuar al Paso 2</button>
       <p id="status1" class="text-sm mt-3"></p>
     </form>
 
-    <!-- PASO 2 -->
+    <!-- PASO 2: TABAQUISMO -->
     <form id="step2" class="space-y-6 bg-white p-6 rounded-2xl shadow hidden">
-      <h3 class="text-lg font-semibold">Preguntas del diagrama de flujo</h3>
-
+      <h3 class="text-lg font-semibold mb-4">Encuesta de tabaquismo</h3>
       <div>
-        <label class="block text-sm font-medium">5. ¿Presenta alguno de estos síntomas (&gt; 3 meses)?</label>
-        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-          <label class="flex items-center gap-2"><input type="checkbox" name="sx_persistentes" value="tos_cronica">Tos crónica</label>
-          <label class="flex items-center gap-2"><input type="checkbox" name="sx_persistentes" value="perdida_peso">Pérdida de peso</label>
-          <label class="flex items-center gap-2"><input type="checkbox" name="sx_persistentes" value="hemoptisis">Tos con sangre</label>
-          <label class="flex items-center gap-2"><input type="checkbox" name="sx_persistentes" value="otros">Otros</label>
-        </div>
+        <label class="block text-sm font-medium">¿Cuántos años lleva fumando o fumó?</label>
+        <input type="number" name="anios_fumando" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
-
       <div>
-        <label class="block text-sm font-medium">6. Preguntas de alto riesgo de cáncer (marca si aplica al menos una)</label>
-        <div class="mt-2 grid grid-cols-1 sm:grid-cols-2 gap-2 text-sm">
-          <label class="flex items-center gap-2"><input type="checkbox" name="alto_riesgo_ca" value="antecedente_ca">Antecedente oncológico relevante</label>
-          <label class="flex items-center gap-2"><input type="checkbox" name="alto_riesgo_ca" value="familiar_1er_grado">Familiar de 1er grado con Ca pulmonar</label>
-          <label class="flex items-center gap-2"><input type="checkbox" name="alto_riesgo_ca" value="ocupacional">Exposición ocupacional (asbesto, sílice, etc.)</label>
-        </div>
+        <label class="block text-sm font-medium">Durante ese tiempo, ¿cuántos cigarros fuma o fumó al día?</label>
+        <input type="number" name="cigarros_dia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
-
       <div>
-        <label class="block text-sm font-medium">7. Índice de exposición a humo de leña</label>
-        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
-          <input type="number" name="indice_humo" min="0" class="rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ingresa el índice acumulado" />
-          <span class="text-xs text-gray-500 self-center">Clasifica Alto si &gt; 100</span>
-        </div>
+        <label class="block text-sm font-medium">Índice tabáquico (IT)</label>
+        <input id="indice_tabaco" type="text" readonly class="w-full rounded-xl border-gray-300 bg-gray-100 px-3 py-2" placeholder="Se calculará automáticamente" />
       </div>
-
-      <div>
-        <span class="block text-sm font-medium">8. ¿Sigue fumando?</span>
-        <div class="mt-2 flex gap-6 text-sm">
-          <label class="flex items-center gap-2"><input type="radio" name="sigue_fumando" value="si" required> Sí</label>
-          <label class="flex items-center gap-2"><input type="radio" name="sigue_fumando" value="no"> No</label>
-        </div>
-      </div>
-
-      <div>
-        <label class="block text-sm font-medium">9. Si no fuma actualmente: ¿Hace cuántos años dejó de fumar?</label>
-        <input type="number" name="anios_abandono" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="0 si continúa fumando" />
-      </div>
-
-      <div class="rounded-xl border p-4 bg-gray-50">
-        <p class="text-sm">Resultado estimado: <span id="resultadoRiesgo" class="font-semibold">—</span></p>
-      </div>
-
       <div class="flex gap-3">
         <button type="button" id="backToStep1" class="px-4 py-3 rounded-2xl bg-gray-200 text-gray-800 font-semibold">Regresar</button>
-        <button type="submit" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow">Enviar evaluación</button>
+        <button type="submit" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow">Enviar evaluación (Tabaquismo)</button>
       </div>
       <p id="status2" class="text-sm mt-3"></p>
+    </form>
+
+    <!-- PASO 3: HUMO DE LEÑA -->
+    <form id="step3" class="space-y-6 bg-white p-6 rounded-2xl shadow hidden">
+      <h3 class="text-lg font-semibold">Encuesta de exposición a humo de leña</h3>
+      <div>
+        <span class="block text-sm font-medium">¿Usted se expone o ha estado expuesto a humo de leña?</span>
+        <div class="mt-2 flex gap-6 text-sm">
+          <label class="flex items-center gap-2"><input type="radio" name="exp_biomasa" value="si" required> Sí</label>
+          <label class="flex items-center gap-2"><input type="radio" name="exp_biomasa" value="no"> No</label>
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium">¿Por cuántos años ha estado expuesto?</label>
+        <input type="number" name="anios_exp_lenia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Durante los años de exposición, en promedio ¿cuántas horas por día?</label>
+        <input type="number" step="0.1" name="horas_dia_lenia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+      </div>
+      <div>
+        <label class="block text-sm font-medium">Índice de biomasa (IB)</label>
+        <input id="indice_biomasa" type="text" readonly class="w-full rounded-xl border-gray-300 bg-gray-100 px-3 py-2" placeholder="Se calculará automáticamente" />
+        <p class="text-xs text-gray-500">IB = (Años de exposición × Horas promedio/día). Clasifica alto si > 100.</p>
+      </div>
+      <div class="rounded-xl border p-4 bg-gray-50">
+        <p class="text-sm">Resultado humo de leña: <span id="resultadoLenia" class="font-semibold">—</span></p>
+      </div>
+      <div class="flex gap-3">
+        <button type="button" id="backToStep1From3" class="px-4 py-3 rounded-2xl bg-gray-200 text-gray-800 font-semibold">Regresar</button>
+        <button type="submit" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow">Enviar evaluación (Humo de leña)</button>
+      </div>
+      <p id="status3" class="text-sm mt-3"></p>
     </form>
   </main>
 
@@ -122,7 +119,6 @@
   </footer>
 
   <script>
-    // ======== CONFIGURACIÓN DE SUPABASE ========
     const SUPABASE_URL = "https://oxqpylpgwawbklabnwcv.supabase.co";
     const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94cXB5bHBnd2F3YmtsYWJud2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNjM5MzUsImV4cCI6MjA3MTYzOTkzNX0.JIVCrC99Vzokk9KT6OOJCp2mW7k7imi5SFAeIBOQyfo";
     const TABLE = "respuestas";
@@ -145,7 +141,6 @@
       return await resp.json();
     }
 
-    // ======== LÓGICA PASO 1 ========
     function calcularIT(){
       const anios = Number(document.querySelector('[name="anios_fumando"]').value)||0;
       const cigarros = Number(document.querySelector('[name="cigarros_dia"]').value)||0;
@@ -154,112 +149,95 @@
       return it;
     }
 
+    function calcularIB(){
+      const anios = Number(document.querySelector('[name="anios_exp_lenia"]').value)||0;
+      const horas = Number(document.querySelector('[name="horas_dia_lenia"]').value)||0;
+      const ib = anios * horas;
+      document.getElementById('indice_biomasa').value = ib ? ib.toFixed(1) : '';
+      const el = document.getElementById('resultadoLenia');
+      if(ib > 100) {
+        el.textContent = 'Alto Riesgo';
+        el.className = 'font-semibold text-red-600';
+      } else {
+        el.textContent = 'Bajo Riesgo';
+        el.className = 'font-semibold text-emerald-700';
+      }
+      return ib;
+    }
+
+    // Tabs
     const step1 = document.getElementById('step1');
     const step2 = document.getElementById('step2');
+    const step3 = document.getElementById('step3');
     const tab1Btn = document.getElementById('tab1Btn');
     const tab2Btn = document.getElementById('tab2Btn');
+    const tab3Btn = document.getElementById('tab3Btn');
+
+    function activateTab(tab){
+      tab1Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+      tab2Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+      tab3Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+      step1.classList.add('hidden'); step2.classList.add('hidden'); step3.classList.add('hidden');
+      if(tab===1){ tab1Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step1.classList.remove('hidden'); }
+      if(tab===2){ tab2Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step2.classList.remove('hidden'); }
+      if(tab===3){ tab3Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step3.classList.remove('hidden'); }
+      tab2Btn.disabled=false; tab3Btn.disabled=false;
+    }
+
+    document.getElementById('goStep3').addEventListener('click', ()=> activateTab(3));
+    document.getElementById('backToStep1').addEventListener('click', ()=> activateTab(1));
+    document.getElementById('backToStep1From3').addEventListener('click', ()=> activateTab(1));
 
     document.querySelector('[name="anios_fumando"]').addEventListener('input', calcularIT);
     document.querySelector('[name="cigarros_dia"]').addEventListener('input', calcularIT);
+    document.querySelector('[name="anios_exp_lenia"]').addEventListener('input', calcularIB);
+    document.querySelector('[name="horas_dia_lenia"]').addEventListener('input', calcularIB);
 
-    // Ir a Paso 2 sin guardar aún
+    // Paso 1 → Paso 2
     step1.addEventListener('submit', (e)=>{
       e.preventDefault();
-      const status = document.getElementById('status1');
-      if (!document.getElementById('consent').checked){
-        status.textContent = 'Debes aceptar el consentimiento.';
-        status.className = 'text-sm mt-3 text-red-600';
-        return;
-      }
-      status.textContent = '';
-      tab1Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      tab2Btn.className = 'px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold';
-      tab2Btn.disabled = false;
-      step1.classList.add('hidden');
-      step2.classList.remove('hidden');
-      actualizarResultado();
+      activateTab(2);
     });
 
-    document.getElementById('backToStep1').addEventListener('click', ()=>{
-      tab1Btn.className = 'px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold';
-      tab2Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      step2.classList.add('hidden');
-      step1.classList.remove('hidden');
-    });
-
-    // ======== LÓGICA PASO 2 (diagrama) ========
-    function anyChecked(name){
-      return Array.from(document.querySelectorAll(`input[name="${name}"]:checked`)).length > 0;
-    }
-
-    function getRadio(name){
-      const r = document.querySelector(`input[name="${name}"]:checked`);
-      return r ? r.value : null;
-    }
-
-    function actualizarResultado(){
-      const edad = Number(document.querySelector('[name="edad"]').value)||0;
-      const it = Number(calcularIT())||0;
-      const indiceHumo = Number(document.querySelector('[name="indice_humo"]').value)||0;
-      const sintomas = anyChecked('sx_persistentes');
-      const altoCa = anyChecked('alto_riesgo_ca');
-      const sigue = getRadio('sigue_fumando');
-      const abandono = Number(document.querySelector('[name="anios_abandono"]').value)||0;
-      let riesgo = 'Bajo Riesgo';
-
-      if (sintomas) riesgo = 'Alto Riesgo';
-      else if (edad < 50) riesgo = 'Bajo Riesgo';
-      else if (altoCa) riesgo = 'Alto Riesgo';
-      else if (indiceHumo > 100) riesgo = 'Alto Riesgo';
-      else if (it > 20) {
-        if (sigue === 'si') riesgo = 'Alto Riesgo';
-        else riesgo = (abandono > 20) ? 'Bajo Riesgo' : 'Alto Riesgo';
-      } else {
-        riesgo = 'Bajo Riesgo';
-      }
-
-      const el = document.getElementById('resultadoRiesgo');
-      el.textContent = riesgo;
-      el.className = 'font-semibold ' + (riesgo === 'Alto Riesgo' ? 'text-red-600' : 'text-emerald-700');
-      return riesgo;
-    }
-
-    step2.addEventListener('input', actualizarResultado);
-
-    // Envío final a Supabase (incluye ambos pasos + clasificación)
+    // Submit tabaquismo
     step2.addEventListener('submit', async (e)=>{
       e.preventDefault();
       const status = document.getElementById('status2');
       status.textContent = 'Enviando…';
       status.className = 'text-sm mt-3 text-gray-600';
       try{
-        const itVal = calcularIT() || 0;
         const payload = {
           created_at: new Date().toISOString(),
+          tipo_formulario: 'tabaquismo',
           edad: Number(document.querySelector('[name="edad"]').value)||null,
+          sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
+          codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
           anios_fumando: Number(document.querySelector('[name="anios_fumando"]').value)||0,
           cigarros_dia: Number(document.querySelector('[name="cigarros_dia"]').value)||0,
-          indice_tabaco: Number(itVal.toFixed ? itVal.toFixed(1) : itVal),
-          consentimiento: document.getElementById('consent').checked,
-          sintomas_persistentes: Array.from(document.querySelectorAll('input[name="sx_persistentes"]:checked')).map(i=>i.value),
-          alto_riesgo_ca: Array.from(document.querySelectorAll('input[name="alto_riesgo_ca"]:checked')).map(i=>i.value),
-          indice_humo: Number(document.querySelector('[name="indice_humo"]').value)||0,
-          sigue_fumando: getRadio('sigue_fumando'),
-          anios_abandono: Number(document.querySelector('[name="anios_abandono"]').value)||0,
-          clasificacion_riesgo: actualizarResultado()
+          indice_tabaco: Number(calcularIT()||0)
         };
         await saveToSupabase(payload);
-        status.textContent = '¡Listo! Respuestas guardadas y evaluación enviada.';
+        status.textContent = '¡Listo! Respuestas guardadas.';
         status.className = 'text-sm mt-3 text-green-600';
-        step1.reset();
-        step2.reset();
-        document.getElementById('indice_tabaco').value = '';
       }catch(err){
         console.error(err);
         status.textContent = 'Error al guardar. Revisa conexión o configuración.';
         status.className = 'text-sm mt-3 text-red-600';
       }
     });
-  </script>
-</body>
-</html>
+
+    // Submit humo de leña
+    step3.addEventListener('submit', async (e)=>{
+      e.preventDefault();
+      const status = document.getElementById('status3');
+      status.textContent = 'Enviando…';
+      status.className = 'text-sm mt-3 text-gray-600';
+      try{
+        const payload = {
+          created_at: new Date().toISOString(),
+          tipo_formulario: 'humo_lenia',
+          edad: Number(document.querySelector('[name="edad"]').value)||null,
+          sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
+          codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
+          exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
+          anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0
