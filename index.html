@@ -17,7 +17,7 @@
   <main class="max-w-3xl mx-auto py-8 px-4">
     <header class="mb-6">
       <h2 class="text-3xl font-bold tracking-tight text-indigo-800">Encuestas</h2>
-      <p class="text-sm text-gray-600 mt-2">Complete los cuestionarios.</p>
+      <p class="text-sm text-gray-600 mt-2">Complete los cuestionarios. Paso 1: tabaquismo. Paso 2: humo de leña.</p>
     </header>
 
     <!-- Tabs -->
@@ -40,6 +40,9 @@
         <div class="mt-2 flex flex-wrap gap-6 text-sm">
           <label class="flex items-center gap-2"><input type="radio" name="sexo" value="M" required> Masculino</label>
           <label class="flex items-center gap-2"><input type="radio" name="sexo" value="F"> Femenino</label>
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="Intersex"> Intersex</label>
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="No binario"> No binario</label>
+          <label class="flex items-center gap-2"><input type="radio" name="sexo" value="Prefiero no decir"> Prefiero no decir</label>
         </div>
       </div>
 
@@ -49,7 +52,7 @@
       </div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        <button type="submit" class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Continuar</button>
+        <button type="button" id="nextToStep2" class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Continuar al Paso 2</button>
         <button type="button" id="goStep3" class="w-full py-3 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-semibold shadow">Ir a Humo de leña</button>
       </div>
       <p id="status1" class="text-sm mt-3"></p>
@@ -163,58 +166,84 @@
     }
 
     // Tabs
-    const step1 = document.getElementById('step1');
-    const step2 = document.getElementById('step2');
-    const step3 = document.getElementById('step3');
-    const tab1Btn = document.getElementById('tab1Btn');
-    const tab2Btn = document.getElementById('tab2Btn');
-    const tab3Btn = document.getElementById('tab3Btn');
+document.addEventListener('DOMContentLoaded', () => {
+  // Referencias
+  const nextToStep2 = document.getElementById('nextToStep2');
+  const nextToStep3 = document.getElementById('nextToStep3');
+  const backToStep1 = document.getElementById('backToStep1');
+  const backToStep1From3 = document.getElementById('backToStep1From3');
 
-    function activateTab(tab){
-      tab1Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      tab2Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      tab3Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      step1.classList.add('hidden'); step2.classList.add('hidden'); step3.classList.add('hidden');
-      if(tab===1){ tab1Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step1.classList.remove('hidden'); }
-      if(tab===2){ tab2Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step2.classList.remove('hidden'); }
-      if(tab===3){ tab3Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step3.classList.remove('hidden'); }
-      tab2Btn.disabled=false; tab3Btn.disabled=false;
+  const step1 = document.getElementById('step1');
+  const step2 = document.getElementById('step2');
+  const step3 = document.getElementById('step3');
+  const tab1Btn = document.getElementById('tab1Btn');
+  const tab2Btn = document.getElementById('tab2Btn');
+  const tab3Btn = document.getElementById('tab3Btn');
+
+  function activateTab(tab){
+    tab1Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+    tab2Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+    tab3Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
+    step1.classList.add('hidden'); step2.classList.add('hidden'); step3.classList.add('hidden');
+    if (tab===1){ tab1Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step1.classList.remove('hidden'); }
+    if (tab===2){ tab2Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step2.classList.remove('hidden'); }
+    if (tab===3){ tab3Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step3.classList.remove('hidden'); }
+    tab2Btn.disabled = false; tab3Btn.disabled = false;
+  }
+
+  // Validación Paso 1 → Paso 2
+  if (nextToStep2) nextToStep2.addEventListener('click', () => {
+    const cp = document.querySelector('[name="codigo_postal"]').value.trim();
+    const sexoChecked = document.querySelector('[name="sexo"]:checked');
+    const edadVal = Number(document.querySelector('[name="edad"]').value || 0);
+    const cpOK = /^\d{5}$/.test(cp);
+    if (!edadVal || !sexoChecked || !cpOK) {
+      // Muestra validaciones nativas
+      document.getElementById('step1').reportValidity();
+      if (!cpOK) alert('Código postal debe tener 5 dígitos.');
+      return;
     }
+    activateTab(2);
+  });
 
-    document.getElementById('goStep3').addEventListener('click', ()=> activateTab(3));
-    document.getElementById('backToStep1').addEventListener('click', ()=> activateTab(1));
-    document.getElementById('backToStep1From3').addEventListener('click', ()=> activateTab(1));
+  // Paso 2 → Paso 3 (solo navegar)
+  if (nextToStep3) nextToStep3.addEventListener('click', () => {
+    activateTab(3);
+  });
 
-    document.querySelector('[name="anios_fumando"]').addEventListener('input', calcularIT);
-    document.querySelector('[name="cigarros_dia"]').addEventListener('input', calcularIT);
-    document.querySelector('[name="anios_exp_lenia"]').addEventListener('input', calcularIB);
-    document.querySelector('[name="horas_dia_lenia"]').addEventListener('input', calcularIB);
+  if (backToStep1) backToStep1.addEventListener('click', () => activateTab(1));
+  if (backToStep1From3) backToStep1From3.addEventListener('click', () => activateTab(1));
+});
 
-    // Paso 1 → Paso 2
-    step1.addEventListener('submit', (e)=>{
+    // Submit humo de leña
+    // Envío ÚNICO al final (Paso 3)
+    step3.addEventListener('submit', async (e)=>{
       e.preventDefault();
-      activateTab(2);
-    });
-
-    // Submit tabaquismo
-    step2.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      const status = document.getElementById('status2');
+      const status = document.getElementById('status3');
       status.textContent = 'Enviando…';
       status.className = 'text-sm mt-3 text-gray-600';
       try{
+        const itVal = calcularIT() || 0;
+        const ibVal = calcularIB() || 0;
+        const clasificacion_lenia = ibVal > 100 ? 'Alto Riesgo' : 'Bajo Riesgo';
         const payload = {
           created_at: new Date().toISOString(),
-          tipo_formulario: 'tabaquismo',
           edad: Number(document.querySelector('[name="edad"]').value)||null,
           sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
           codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
+          // Tabaquismo
           anios_fumando: Number(document.querySelector('[name="anios_fumando"]').value)||0,
           cigarros_dia: Number(document.querySelector('[name="cigarros_dia"]').value)||0,
-          indice_tabaco: Number(calcularIT()||0)
+          indice_tabaco: Number(itVal.toFixed ? itVal.toFixed(1) : itVal),
+          // Humo de leña
+          exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
+          anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0,
+          horas_dia_lenia: Number(document.querySelector('[name="horas_dia_lenia"]').value)||0,
+          indice_biomasa: Number(ibVal.toFixed ? ibVal.toFixed(1) : ibVal),
+          clasificacion_riesgo_lenia: clasificacion_lenia
         };
         await saveToSupabase(payload);
-        status.textContent = '¡Listo! Respuestas guardadas.';
+        status.textContent = '¡Listo! Se enviaron todas las respuestas.';
         status.className = 'text-sm mt-3 text-green-600';
       }catch(err){
         console.error(err);
@@ -222,10 +251,6 @@
         status.className = 'text-sm mt-3 text-red-600';
       }
     });
-
-    // Submit humo de leña
-    step3.addEventListener('submit', async (e)=>{
-      e.preventDefault();
       const status = document.getElementById('status3');
       status.textContent = 'Enviando…';
       status.className = 'text-sm mt-3 text-gray-600';
@@ -238,3 +263,4 @@
           codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
           exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
           anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0
+
