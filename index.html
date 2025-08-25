@@ -5,6 +5,8 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Encuesta de Tabaquismo y Humo de Leña</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <!-- JS externo -->
+  <script src="app.js?v=1" defer></script>
 </head>
 <body class="min-h-screen bg-gray-50 text-gray-900">
   <nav class="bg-indigo-700 text-white py-4 shadow">
@@ -23,7 +25,19 @@
   <main class="max-w-3xl mx-auto py-8 px-4">
     <header class="mb-6">
       <h2 class="text-3xl font-bold tracking-tight text-indigo-800">Encuestas</h2>
-      <p class="text-sm text-gray-600 mt-2">Complete los cuestionarios. Paso 1: datos básicos → Paso 2: tabaquismo → Paso 3: humo de leña. Envío único al final.</p>
+      <p class="text-sm text-gray-600 mt-2">
+        Complete los cuestionarios. Paso 1: datos básicos → Paso 2: tabaquismo → Paso 3: humo de leña.
+      </p>
+      <!-- Stepper -->
+      <div class="mt-6 flex items-center justify-center gap-3 select-none" id="stepper">
+        <div class="flex items-center gap-3">
+          <div id="dot1" class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center text-sm font-semibold">1</div>
+          <div id="bar12" class="w-20 h-1 bg-indigo-200 rounded"></div>
+          <div id="dot2" class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-semibold">2</div>
+          <div id="bar23" class="w-20 h-1 bg-gray-200 rounded"></div>
+          <div id="dot3" class="w-8 h-8 rounded-full bg-gray-200 text-gray-600 flex items-center justify-center text-sm font-semibold">3</div>
+        </div>
+      </div>
     </header>
 
     <!-- Tabs -->
@@ -34,14 +48,13 @@
     </div>
 
     <!-- PASO 1: DATOS BÁSICOS -->
-    <form id="step1" class="space-y-6 bg-white p-6 rounded-2xl shadow">
-      <h3 class="text-lg font-semibold mb-4">Datos básicos</h3>
-      <div>
+    <form id="step1" class="bg-white p-6 rounded-2xl shadow divide-y divide-gray-200">
+      <h3 class="text-lg font-semibold mb-1">Datos básicos</h3>
+      <div class="py-4">
         <label class="block text-sm font-medium">Edad</label>
         <input type="number" name="edad" min="0" max="120" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
-
-      <div>
+      <div class="py-4">
         <label class="block text-sm font-medium">Sexo</label>
         <div class="mt-2 flex flex-wrap gap-6 text-sm">
           <label class="flex items-center gap-2"><input type="radio" name="sexo" value="M" required> Masculino</label>
@@ -51,337 +64,83 @@
           <label class="flex items-center gap-2"><input type="radio" name="sexo" value="Prefiero no decir"> Prefiero no decir</label>
         </div>
       </div>
-
-      <div>
+      <div class="py-4">
         <label class="block text-sm font-medium">Código postal</label>
         <input type="text" name="codigo_postal" inputmode="numeric" pattern="\d{5}" maxlength="5" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" placeholder="Ej. 64000" required />
       </div>
-
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+      <div class="pt-4 grid grid-cols-1 sm:grid-cols-2 gap-3">
         <button type="button" id="nextToStep2" class="w-full py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Continuar al Paso 2</button>
         <button type="button" id="goStep3" class="w-full py-3 rounded-2xl bg-sky-600 hover:bg-sky-700 text-white font-semibold shadow">Ir a Humo de leña</button>
       </div>
     </form>
 
     <!-- PASO 2: TABAQUISMO -->
-    <form id="step2" class="space-y-6 bg-white p-6 rounded-2xl shadow hidden">
-      <h3 class="text-lg font-semibold mb-4">Encuesta de tabaquismo</h3>
-      <div>
+    <form id="step2" class="mt-6 bg-white p-6 rounded-2xl shadow hidden divide-y divide-gray-200">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Encuesta de tabaquismo</h3>
+        <span class="text-xs text-gray-500">Paso 2 de 3</span>
+      </div>
+      <div class="py-4">
         <label class="block text-sm font-medium">¿Cuántos años lleva fumando o fumó?</label>
         <input type="number" name="anios_fumando" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
-      <div>
+      <div class="py-4">
         <label class="block text-sm font-medium">Durante ese tiempo, ¿cuántos cigarros fuma o fumó al día?</label>
         <input type="number" name="cigarros_dia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
       </div>
-      <div>
+      <div class="py-4">
         <label class="block text-sm font-medium">Índice tabáquico (IT)</label>
         <input id="indice_tabaco" type="text" readonly class="w-full rounded-xl border-gray-300 bg-gray-100 px-3 py-2" placeholder="Se calculará automáticamente" />
       </div>
-      <div class="flex gap-3">
+      <div class="pt-4 flex gap-3">
         <button type="button" id="backToStep1" class="px-4 py-3 rounded-2xl bg-gray-200 text-gray-800 font-semibold">Regresar</button>
         <button type="button" id="nextToStep3" class="flex-1 py-3 rounded-2xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold shadow">Siguiente: Humo de leña</button>
       </div>
     </form>
 
     <!-- PASO 3: HUMO DE LEÑA -->
-    <form id="step3" class="space-y-6 bg-white p-6 rounded-2xl shadow hidden">
-      <h3 class="text-lg font-semibold">Encuesta de exposición a humo de leña</h3>
-      <div>
+    <form id="step3" class="mt-6 bg-white p-6 rounded-2xl shadow hidden divide-y divide-gray-200">
+      <div class="flex items-center justify-between">
+        <h3 class="text-lg font-semibold">Encuesta de exposición a humo de leña</h3>
+        <span class="text-xs text-gray-500">Paso 3 de 3</span>
+      </div>
+      <div class="py-4">
         <span class="block text-sm font-medium">¿Usted se expone o ha estado expuesto a humo de leña?</span>
         <div class="mt-2 flex gap-6 text-sm">
           <label class="flex items-center gap-2"><input type="radio" name="exp_biomasa" value="si" required> Sí</label>
           <label class="flex items-center gap-2"><input type="radio" name="exp_biomasa" value="no"> No</label>
         </div>
       </div>
-      <div>
-        <label class="block text-sm font-medium">¿Por cuántos años ha estado expuesto?</label>
-        <input type="number" name="anios_exp_lenia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+      <!-- Bloque que se oculta si elige NO -->
+      <div id="leniaDetails" class="space-y-4">
+        <div class="py-4">
+          <label class="block text-sm font-medium">¿Por cuántos años ha estado expuesto?</label>
+          <input type="number" name="anios_exp_lenia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+        </div>
+        <div class="py-4">
+          <label class="block text-sm font-medium">Durante los años de exposición, en promedio ¿cuántas horas por día?</label>
+          <input type="number" step="0.1" name="horas_dia_lenia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
+        </div>
+        <div class="py-4">
+          <label class="block text-sm font-medium">Índice de biomasa (IB)</label>
+          <input id="indice_biomasa" type="text" readonly class="w-full rounded-xl border-gray-300 bg-gray-100 px-3 py-2" placeholder="Se calculará automáticamente" />
+          <p class="text-xs text-gray-500">IB = (Años × Horas promedio/día). Clasifica alto si &gt; 100.</p>
+        </div>
+        <div class="py-4 rounded-xl border p-4 bg-gray-50">
+          <p class="text-sm">Resultado humo de leña: <span id="resultadoLenia" class="font-semibold">—</span></p>
+        </div>
       </div>
-      <div>
-        <label class="block text-sm font-medium">Durante los años de exposición, en promedio ¿cuántas horas por día?</label>
-        <input type="number" step="0.1" name="horas_dia_lenia" min="0" class="mt-1 w-full rounded-xl border-gray-300 focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500" required />
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Índice de biomasa (IB)</label>
-        <input id="indice_biomasa" type="text" readonly class="w-full rounded-xl border-gray-300 bg-gray-100 px-3 py-2" placeholder="Se calculará automáticamente" />
-        <p class="text-xs text-gray-500">IB = (Años de exposición × Horas promedio/día). Clasifica alto si &gt; 100.</p>
-      </div>
-      <div class="rounded-xl border p-4 bg-gray-50">
-        <p class="text-sm">Resultado humo de leña: <span id="resultadoLenia" class="font-semibold">—</span></p>
-      </div>
-      <div class="flex gap-3">
+      <div class="pt-4 flex gap-3">
         <button type="button" id="backToStep1From3" class="px-4 py-3 rounded-2xl bg-gray-200 text-gray-800 font-semibold">Regresar</button>
         <button type="submit" class="flex-1 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white font-semibold shadow">Enviar evaluación</button>
       </div>
       <p id="status3" class="text-sm mt-3"></p>
     </form>
-
-    <!-- Panel de ayuda RLS / Exportación -->
-    <section id="policyHelp" class="hidden mt-8 rounded-2xl border border-red-300 bg-red-50 p-4">
-      <h4 class="font-semibold text-red-800 mb-2">Supabase: Falta política de Row Level Security (RLS) para insertar</h4>
-      <p class="text-sm text-red-900">Copia y ejecuta este SQL en <em>SQL Editor</em> de Supabase para permitir <code>INSERT</code> desde GitHub Pages (rol <code>anon</code>):</p>
-      <pre class="mt-3 overflow-auto text-xs bg-white p-3 rounded border"><code id="policySQL">-- Habilita RLS si aún no
-alter table public.respuestas enable row level security;
-
--- Permitir INSERT al rol público anónimo (Pages)
-create policy if not exists "anon can insert respuestas"
-  on public.respuestas
-  for insert
-  to anon
-  with check (true);
-</code></pre>
-      <div class="mt-3 flex gap-2">
-        <button id="copyPolicy" class="px-3 py-2 rounded-lg bg-red-600 text-white text-sm">Copiar SQL</button>
-        <button id="exportCSV" class="px-3 py-2 rounded-lg bg-gray-800 text-white text-sm">Exportar pendientes (CSV)</button>
-        <button id="retrySend" class="px-3 py-2 rounded-lg bg-emerald-600 text-white text-sm">Reintentar envío</button>
-      </div>
-      <p class="text-xs text-red-700 mt-2">Mientras aplicas la política, este formulario guardará localmente y te permite exportar un CSV para no perder respuestas.</p>
-    </section>
   </main>
 
   <footer class="bg-gray-100 text-center text-xs text-gray-500 py-4 mt-10">
     <p>© 2025 Proyecto de Tamizaje Pulmonar · Desarrollado para fines académicos</p>
     <p id="testsSummary" class="mt-1 text-[11px]"></p>
   </footer>
-
-  <script>
-    // ===== Supabase Config =====
-    const SUPABASE_URL = "https://oxqpylpgwawbklabnwcv.supabase.co";
-    const SUPABASE_ANON_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im94cXB5bHBnd2F3YmtsYWJud2N2Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTYwNjM5MzUsImV4cCI6MjA3MTYzOTkzNX0.JIVCrC99Vzokk9KT6OOJCp2mW7k7imi5SFAeIBOQyfo";
-    const TABLE = "respuestas";
-
-    // ===== Utilidades UI =====
-    function showDiag(msg){
-      const b = document.getElementById('diagBanner');
-      const t = document.getElementById('diagText');
-      if (!b || !t) return;
-      t.textContent = msg;
-      b.classList.remove('hidden');
-    }
-    function hideDiag(){
-      const b = document.getElementById('diagBanner');
-      if (b) b.classList.add('hidden');
-    }
-
-    // ===== Persistencia local (cola offline) =====
-    const LS_KEY = 'encuesta_pendientes_v1';
-    function queueLocally(payload){
-      const arr = JSON.parse(localStorage.getItem(LS_KEY) || '[]');
-      arr.push({ ts: new Date().toISOString(), payload });
-      localStorage.setItem(LS_KEY, JSON.stringify(arr));
-    }
-    function getPending(){
-      return JSON.parse(localStorage.getItem(LS_KEY) || '[]');
-    }
-    function clearPending(){
-      localStorage.removeItem(LS_KEY);
-    }
-    function exportPendingCSV(){
-      const rows = getPending();
-      if (!rows.length){ alert('No hay pendientes.'); return; }
-      const headers = Array.from(new Set(rows.flatMap(r => Object.keys(r.payload))));
-      const csvRows = [ ['ts', ...headers].join(',') ];
-      for (const r of rows){
-        const line = [r.ts, ...headers.map(h => JSON.stringify(r.payload[h] ?? ''))].join(',');
-        csvRows.push(line);
-      }
-      const blob = new Blob([csvRows.join('\n')], {type:'text/csv'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = 'pendientes_encuesta.csv'; a.click();
-      URL.revokeObjectURL(url);
-    }
-
-    // ===== API =====
-    async function saveToSupabase(payload) {
-      const resp = await fetch(`${SUPABASE_URL}/rest/v1/${TABLE}`, {
-        method: 'POST',
-        headers: {
-          'apikey': SUPABASE_ANON_KEY,
-          'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-          'Content-Type': 'application/json',
-          'Prefer': 'return=representation'
-        },
-        body: JSON.stringify(payload)
-      });
-      if (!resp.ok) {
-        const txt = await resp.text();
-        const msg = `Error ${resp.status}: ${txt}`;
-        throw new Error(msg);
-      }
-      return await resp.json();
-    }
-
-    // ===== Cálculos =====
-    function calcularIT(){
-      const anios = Number(document.querySelector('[name="anios_fumando"]').value)||0;
-      const cigarros = Number(document.querySelector('[name="cigarros_dia"]').value)||0;
-      const it = (cigarros * anios)/20;
-      const itEl = document.getElementById('indice_tabaco');
-      if (itEl) itEl.value = it ? it.toFixed(1) : '';
-      return it;
-    }
-
-    function calcularIB(){
-      const anios = Number(document.querySelector('[name="anios_exp_lenia"]').value)||0;
-      const horas = Number(document.querySelector('[name="horas_dia_lenia"]').value)||0;
-      const ib = anios * horas;
-      const ibEl = document.getElementById('indice_biomasa');
-      if (ibEl) ibEl.value = ib ? ib.toFixed(1) : '';
-      const resEl = document.getElementById('resultadoLenia');
-      if (resEl){
-        if(ib > 100){ resEl.textContent = 'Alto Riesgo'; resEl.className = 'font-semibold text-red-600'; }
-        else { resEl.textContent = 'Bajo Riesgo'; resEl.className = 'font-semibold text-emerald-700'; }
-      }
-      return ib;
-    }
-
-    // ===== Tabs + navegación =====
-    const step1 = document.getElementById('step1');
-    const step2 = document.getElementById('step2');
-    const step3 = document.getElementById('step3');
-    const tab1Btn = document.getElementById('tab1Btn');
-    const tab2Btn = document.getElementById('tab2Btn');
-    const tab3Btn = document.getElementById('tab3Btn');
-
-    function activateTab(tab){
-      tab1Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      tab2Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      tab3Btn.className = 'px-3 py-2 rounded-xl bg-gray-200 text-gray-800 text-sm font-semibold';
-      step1.classList.add('hidden'); step2.classList.add('hidden'); step3.classList.add('hidden');
-      if(tab===1){ tab1Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step1.classList.remove('hidden'); }
-      if(tab===2){ tab2Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step2.classList.remove('hidden'); }
-      if(tab===3){ tab3Btn.className='px-3 py-2 rounded-xl bg-indigo-600 text-white text-sm font-semibold'; step3.classList.remove('hidden'); }
-      tab2Btn.disabled=false; tab3Btn.disabled=false;
-    }
-
-    // Listeners de navegación
-    document.getElementById('nextToStep2').addEventListener('click', ()=>{
-      if (step1.checkValidity()) activateTab(2); else step1.reportValidity();
-    });
-    document.getElementById('goStep3').addEventListener('click', ()=> activateTab(3));
-    document.getElementById('backToStep1').addEventListener('click', ()=> activateTab(1));
-    document.getElementById('backToStep1From3').addEventListener('click', ()=> activateTab(1));
-    document.getElementById('nextToStep3').addEventListener('click', ()=> activateTab(3));
-
-    // Listeners de cálculo
-    document.querySelector('[name="anios_fumando"]').addEventListener('input', calcularIT);
-    document.querySelector('[name="cigarros_dia"]').addEventListener('input', calcularIT);
-    document.querySelector('[name="anios_exp_lenia"]').addEventListener('input', calcularIB);
-    document.querySelector('[name="horas_dia_lenia"]').addEventListener('input', calcularIB);
-
-    // ===== Envío único con manejo de RLS =====
-    document.getElementById('copyPolicy').addEventListener('click', ()=>{
-      const txt = document.getElementById('policySQL').innerText;
-      navigator.clipboard.writeText(txt);
-      alert('SQL copiado. Pégalo en Supabase → SQL Editor y ejecútalo.');
-    });
-    document.getElementById('exportCSV').addEventListener('click', exportPendingCSV);
-    document.getElementById('retrySend').addEventListener('click', async ()=>{
-      const pend = getPending();
-      if (!pend.length){ alert('No hay pendientes que reenviar.'); return; }
-      showDiag('Reintentando envío de ' + pend.length + ' registro(s)…');
-      try{
-        for (const item of pend){ await saveToSupabase(item.payload); }
-        clearPending(); hideDiag(); alert('¡Listo! Se reenvió la cola.');
-      }catch(err){ showDiag('Sigue fallando el envío. Revisa la política RLS.'); console.error(err); }
-    });
-
-    const status3 = document.getElementById('status3');
-    step3.addEventListener('submit', async (e)=>{
-      e.preventDefault();
-      status3.textContent = 'Enviando…';
-      status3.className = 'text-sm mt-3 text-gray-600';
-      try{
-        const itVal = calcularIT() || 0;
-        const ibVal = calcularIB() || 0;
-        const clasificacion_lenia = ibVal > 100 ? 'Alto Riesgo' : 'Bajo Riesgo';
-        const payload = {
-          created_at: new Date().toISOString(),
-          edad: Number(document.querySelector('[name="edad"]').value)||null,
-          sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
-          codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
-          anios_fumando: Number(document.querySelector('[name="anios_fumando"]').value)||0,
-          cigarros_dia: Number(document.querySelector('[name="cigarros_dia"]').value)||0,
-          indice_tabaco: Number(itVal.toFixed ? itVal.toFixed(1) : itVal),
-          exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
-          anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0,
-          horas_dia_lenia: Number(document.querySelector('[name="horas_dia_lenia"]').value)||0,
-          indice_biomasa: Number(ibVal.toFixed ? ibVal.toFixed(1) : ibVal),
-          clasificacion_riesgo_lenia: clasificacion_lenia
-        };
-        await saveToSupabase(payload);
-        status3.textContent = '¡Listo! Se enviaron todas las respuestas.';
-        status3.className = 'text-sm mt-3 text-green-600';
-        hideDiag();
-      }catch(err){
-        console.error(err);
-        // Manejo específico de RLS 401/403
-        const isRLS = /row-level security|42501|401|403/i.test(err.message);
-        if (isRLS){
-          queueLocally({
-            note: 'guardado-local-por-rls',
-            ...{
-              created_at: new Date().toISOString(),
-              edad: Number(document.querySelector('[name="edad"]').value)||null,
-              sexo: document.querySelector('[name="sexo"]:checked')?.value || null,
-              codigo_postal: document.querySelector('[name="codigo_postal"]').value || null,
-              anios_fumando: Number(document.querySelector('[name="anios_fumando"]').value)||0,
-              cigarros_dia: Number(document.querySelector('[name="cigarros_dia"]').value)||0,
-              indice_tabaco: Number((calcularIT()||0).toFixed ? (calcularIT()||0).toFixed(1) : (calcularIT()||0)),
-              exp_biomasa: document.querySelector('input[name="exp_biomasa"]:checked')?.value || null,
-              anios_exp_lenia: Number(document.querySelector('[name="anios_exp_lenia"]').value)||0,
-              horas_dia_lenia: Number(document.querySelector('[name="horas_dia_lenia"]').value)||0,
-              indice_biomasa: Number((calcularIB()||0).toFixed ? (calcularIB()||0).toFixed(1) : (calcularIB()||0)),
-              clasificacion_riesgo_lenia: (calcularIB()||0) > 100 ? 'Alto Riesgo' : 'Bajo Riesgo'
-            }
-          });
-          document.getElementById('policyHelp').classList.remove('hidden');
-          showDiag('No se pudo insertar en Supabase por política RLS. Se guardó localmente y puedes exportar CSV.');
-          status3.textContent = 'Guardado local por RLS. Aplica la política y reintenta.';
-          status3.className = 'text-sm mt-3 text-red-600';
-        } else {
-          status3.textContent = 'Error al guardar. Revisa conexión o configuración.';
-          status3.className = 'text-sm mt-3 text-red-600';
-        }
-      }
-    });
-
-    // ===== Tests rápidos (auto-chequeo en consola + pie de página) =====
-    function runSelfTests(){
-      const cases = [];
-      // IT: (cigarros*días)/20
-      cases.push({ name:'IT básico', fn: ()=>{ 
-        document.querySelector('[name="anios_fumando"]').value = 20;
-        document.querySelector('[name="cigarros_dia"]').value = 20;
-        const v = calcularIT();
-        return Math.abs(v - 20) < 1e-9; // 20*20/20 = 20
-      }});
-      cases.push({ name:'IB básico', fn: ()=>{
-        document.querySelector('[name="anios_exp_lenia"]').value = 25;
-        document.querySelector('[name="horas_dia_lenia"]').value = 5;
-        const v = calcularIB();
-        return Math.abs(v - 125) < 1e-9; // 25*5 = 125 (alto)
-      }});
-      // Validación CP (no modifica DOM): usar RegExp directamente
-      cases.push({ name:'CP 5 dígitos', fn: ()=>/^\d{5}$/.test('64000') && !/^\d{5}$/.test('6400') });
-
-      let pass = 0; const results = [];
-      for (const c of cases){ const ok = !!c.fn(); pass += ok?1:0; results.push(`${ok?'✅':'❌'} ${c.name}`); }
-      console.log('[Self-tests]', results.join(' | '));
-      const el = document.getElementById('testsSummary');
-      if (el) el.textContent = `Tests: ${pass}/${cases.length} → ${results.join(' · ')}`;
-    }
-    window.addEventListener('load', runSelfTests);
-
-    // ===== Banner de errores JS globales =====
-    window.addEventListener('error', (ev) => {
-      const el = document.createElement('div');
-      el.style.cssText = 'position:fixed;bottom:0;left:0;right:0;background:#fee;color:#900;padding:8px 12px;font:12px/1.4 system-ui;z-index:9999;border-top:1px solid #f88';
-      el.textContent = 'Error JS: ' + (ev.message || ev.error || ev.filename || 'desconocido');
-      document.body.appendChild(el);
-    });
-  </script>
 </body>
 </html>
